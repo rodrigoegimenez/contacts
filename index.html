@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -17,8 +18,7 @@
       <i class="fa fa-fw fa-address-book"></i>
       <span>My Contact List</span>
     </h1>
-    <!-- TODO show the new-contact-form when this button is clicked -->
-    <button class="fab" title="New Contact">
+    <button onclick="toggleAddContactForm()" class="fab" title="New Contact">
       <i class="fa fa-lg fa-plus-circle"></i>
     </button>
     </div>
@@ -26,8 +26,7 @@
   </header>
 
   <main class="container">
-    <!-- TODO Finish this form you need two more input fields one is type="checkbox" -->
-    <form class="card mt-1 mb-1" id="new-contact-form" class="" onsubmit="addContact(event)">
+    <form class="card mt-1 mb-1 hidden" id="new-contact-form" class="" onsubmit="addContact(event)">
       <div>
         <h4 class="mt-1 mb-1">
           <i class="fa fa-fw fa-user"></i>
@@ -38,36 +37,23 @@
         <label for="name">Name:</label>
         <input type="text" name="name">
       </div>
+      <div>
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone">
+      </div>
+      <div>
+        <label for="emergency">Emergency Number?</label>
+        <input type="checkbox" name="emergency">
+      </div>
       <hr>
       <div class="d-flex space-between">
         <button type="submit">Submit</button>
-        <!-- TODO hide this form when this button is clicked -->
-        <button class="btn-cancel" type="button" >cancel</button>
+        <button onclick="toggleAddContactForm()" class="btn-cancel" type="button">cancel</button>
       </div>
     </form>
 
     <div class="contacts" id="contact-list">
-      <!-- TODO Remove these templates and draw them using JavaScript -->
-      <div class="card mt-1 mb-1">
-        <h3 class="mt-1 mb-1">Jimmy Tester</h3>
-        <div class="d-flex space-between">
-          <p>
-            <i class="fa fa-fw fa-phone"></i>
-            <span>(777) 777-7777</span>
-          </p>
-          <i class="action fa fa-trash text-danger"></i>
-        </div>
-      </div>
-      <div class="card mt-1 mb-1 emergency-contact">
-        <h3 class="mt-1 mb-1">Emergency Contact Tester</h3>
-        <div class="d-flex space-between">
-          <p>
-            <i class="fa fa-fw fa-phone"></i>
-            <span>(777) 777-7777</span>
-          </p>
-          <i class="action fa fa-trash text-danger"></i>
-        </div>
-      </div>
+
     </div>
   </main>
 

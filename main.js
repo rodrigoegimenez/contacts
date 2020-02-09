@@ -10,7 +10,29 @@ let contacts = []
  * *** push: resources/push.jpg
  */
 function addContact(event) {
-  
+  event.preventDefault()
+  let form = event.target
+  let name = form.name.value
+  let phone = form.phone.value
+  let emergency = form.emergency.checked
+  let contact = contacts.find(contact => contact.name == name)
+  if (!contact) {
+    contact = {
+      id: generateId(),
+      name: name,
+      phone: phone,
+      emergency: emergency
+    }
+    contacts.push(contact)
+  }
+  else {
+    contact.phone = phone
+    contact.emergency = emergency
+  }
+  form.reset()
+  toggleAddContactForm()
+  saveContacts()
+  drawContacts()
 }
 
 /**
@@ -18,7 +40,7 @@ function addContact(event) {
  * Saves the string to localstorage at the key contacts 
  */
 function saveContacts() {
- 
+  window.localStorage.setItem("contacts", JSON.stringify(contacts))
 }
 
 /**
@@ -27,7 +49,10 @@ function saveContacts() {
  * the contacts array to the retrieved array
  */
 function loadContacts() {
-  
+  let contactsData = JSON.parse(window.localStorage.getItem("contacts"))
+  if (contactsData) {
+    contacts = contactsData
+  }
 }
 
 /**
@@ -36,7 +61,25 @@ function loadContacts() {
  * contacts in the contacts array
  */
 function drawContacts() {
- 
+  sortContacts()
+  let template = ""
+  contacts.forEach(contact => {
+    if (contact.emergency) {
+      template += '<div class="card mt-1 mb-1 emergency-contact">'
+    } else {
+      template += '<div class="card mt-1 mb-1">'
+    }
+    template += `<h3 class="mt-1 mb-1">${contact.name}</h3>
+        <div class="d-flex space-between">
+          <p>
+            <i class="fa fa-fw fa-phone"></i>
+            <span>${contact.phone}</span>
+          </p>
+          <i class="action fa fa-trash text-danger" onclick="removeContact('${contact.id}')"></i>
+        </div>
+      </div>`
+  })
+  document.getElementById("contact-list").innerHTML = template
 }
 
 /**
@@ -49,13 +92,22 @@ function drawContacts() {
  * @param {string} contactId 
  */
 function removeContact(contactId) {
+  let index = contacts.findIndex(contact => contact.id == contactId)
+  contacts.splice(index, 1)
+  saveContacts()
+  drawContacts()
 }
 
 /**
  * Toggles the visibility of the AddContact Form
  */
 function toggleAddContactForm() {
-
+  let contactForm = document.getElementById("new-contact-form")
+  if (contactForm.classList.contains("hidden")) {
+    contactForm.classList.remove("hidden")
+  } else {
+    contactForm.classList.add("hidden")
+  }
 }
 
 
@@ -68,6 +120,15 @@ function generateId() {
   return Math.floor(Math.random() * 10000000) + "-" + Math.floor(Math.random() * 10000000)
 }
 
+function sortContacts() {
+  contacts.sort((a, b) => {
+    if (a.emergency && !b.emergency) return -1
+    if (!a.emergency && b.emergency) return 1
+    if (a.name < b.name) return -1
+    if (a.name > b.name) return 1
+    return 0
+  })
+}
 
 loadContacts()
 drawContacts()
